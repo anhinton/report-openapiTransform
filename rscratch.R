@@ -1,15 +1,29 @@
-library(XML)
-document <- xmlRoot(xmlParse("transformableDocuments.xml"))
+library(conduit)
+library(gridGraphviz)
+toHtml <- loadPipeline(name = "toHtml",
+                       ref = "transform/toHtml/pipeline.xml")
 
-nodeNames <- function(node) {
-    kids <- xmlChildren(node)
-    names <- sapply(kids, nodeNames)
-    names <- c(names, names(kids))
-    names
-}
+nodes <- sapply(getComponents(toHtml), getName)
 
-body <- xmlChildren(document)[["body"]]
+edgeList <- lapply(
+    nodes,
+    function(start, pipes) {
+        edges = character()
+        for (i in seq_along(pipes)) {
+            if (startComponent(pipes[[i]]) == start)
+                edges <- c(edges, endComponent(pipes[[i]]))
+        }
+        edges
+    }, pipes)
 
-allNames <- nodeNames(body)
-allNames <- unlist(allNames)
-unique(allNames)
+names(edgeList) <- nodes
+
+toHtmlGraph <- new("graphNEL", nodes = nodes, edgeL = edgeList,
+                   edgemode = "directed")
+
+Ragraph <- agopenTrue(graph = toHtmlGraph, "",
+                      attrs= list(node = list(shape = "ellipse")))
+png("~/Desktop/test.png", width = graphWidth(Ragraph) * 96,
+    height = graphHeight(Ragraph) * 96)
+grid.graph(Ragraph, newpage = TRUE)
+dev.off()
