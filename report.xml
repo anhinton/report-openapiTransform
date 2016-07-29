@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!DOCTYPE document [
+<!ENTITY mdash "&#x2014;">
+<!ENTITY ndash "&#x2013;">
+<!ENTITY us "_">
+<!ENTITY tilde "~">
+<!ENTITY bar "|">
+]>
+<document xmlns:xi="http://www.w3.org/2001/XInclude">
+  
+  <metadata>
+    <title>Transforming documents with OpenAPI pipelines</title>
+    <author>
+      <name>Ashley Noel Hinton</name>
+      <email>ahin017@aucklanduni.ac.nz</email>
+    </author>
+    <author>
+      <name>Paul Murrell</name>
+      <email>paul@stat.auckland.ac.nz</email>
+    </author>
+    <affiliation>Department of Statistics, The University of Auckland</affiliation>
+    <date></date>
+    <description>Technical report on transforming documents using an
+    OpenAPI pipeline.</description>
+  </metadata>
+
+  <body>
+    <section id="introduction">
+      <p></p>
+    </section>
+
+    <!-- end section -->
+
+    <section>    
+      <h1>A markup transformable document format</h1>
+            
+    </section>
+
+    <!-- end section -->
+
+    <section>
+      <h1>The <code>document</code> markup format</h1>
+
+      <p>The transformable document format described in this report is
+      an XML file with <code>document</code> as the root element. This
+      document has two child elements: <code>metadata</code> and
+      <code>body</code>.</p>
+
+      <p>The <code>metadata</code> element contains the document metadata,
+      with elements for the document <code>title</code> and
+      <code>subtitle</code>, <code>author</code> information,
+      <code>date</code> of publication, and a <code>description</code>
+      section. An example <code>metadata</code> element follows:</p>
+
+      <pre><code><xi:include href="metadataExample.xml" parse="text">
+	<xi:fallback>xinclude metadataExample.html</xi:fallback>
+      </xi:include></code></pre>
+
+      <p>The <code>body</code> element contains the document's main
+      content. The following elements are used in the same way as they
+      are used in HTML
+      (<url>https://www.w3.org/TR/html-markup/elements.html</url>):</p>
+
+      <ul>
+	<li><code>a</code> &ndash; hyperlink</li>
+	<li><code>code</code> &ndash; code fragment</li>
+	<li><code>em</code> &ndash; emphatic stress</li>
+	<li><code>figcaption</code> &ndash; figure caption</li>
+	<li><code>figure</code> &ndash; figure with optional caption</li>
+	<li><code>h1</code> &ndash; heading</li>
+	<li><code>h2</code> &ndash; heading</li>
+	<li><code>h3</code> &ndash; heading</li>
+	<li><code>img</code> &ndash; image</li>
+	<li><code>li</code> &ndash; list item</li>
+	<li><code>ol</code> &ndash; ordered list</li>
+	<li><code>p</code> &ndash; paragraph</li>
+	<li><code>pre</code> &ndash; preformatted text</li>
+	<li><code>q</code> &ndash; quoted text</li>
+	<li><code>section</code> &ndash; section</li>
+	<li><code>strong</code> &ndash; strong importance</li>
+	<li><code>ul</code> &ndash; unordered list</li>
+      </ul>
+
+      <p>The <code>&lt;url&gt;</code> element is introduced in the
+      <code>document</code> format to indicate a hyperlink where the
+      enclosed URL is both the href and the value. The following code
+      block demonstrates the use of the <code>url</code> element:</p>
+
+      <pre><code><xi:include href="elementsExample.xml" parse="text">
+	<xi:fallback><todo>xinclude elementsExample.xml</todo></xi:fallback>
+      </xi:include></code></pre>
+
+      <p>The resulting output:</p>
+
+      <xi:include href="elementsExample.xml" parse="xml">
+	<xi:fallback><todo>xinclude elementsExample.xml</todo></xi:fallback>
+      </xi:include>
+
+      <p>The <code>document</code> XML format uses
+      <code>&lt;code&gt;</code> elements to indicate blocks of
+      computer code, just as in HTML. Dynamic code chunks which are to
+      be executed are marked using the <code>class</code> attribute to
+      <code>code</code>. For example chunks of R code which are to be
+      executed used the Knitr package are wrapped in a
+      <code>&lt;code&gt;</code> element with
+      <code>class="knitr"</code>. An author can also provide a
+      <code>name</code> attribute for the knitr code chunk, as well as
+      knitr <code>options</code>. A document author can also use
+      <code>CDATA</code> sections to wrap code with reserved XML
+      characters. The following code demonstrates how to include an R
+      code chunk to be executed with Knitr:</p>
+
+      <pre><code><xi:include href="knitrExample.xml" parse="text">
+	<xi:fallback><todo>xinclude knitrExample.xml</todo></xi:fallback>
+      </xi:include></code></pre>
+
+      <p>And the following is the result of executing this code
+      chunk:</p>
+
+      <xi:include href="knitrExample.xml" parse="xml">
+	<xi:fallback><todo>xinclude knitrExample.xml</todo></xi:fallback>
+      </xi:include>
+
+      <p>The <code>document</code> format also makes use of the
+      <code>include</code> element from XInclude
+      (<url>http://www.w3.org/2001/XInclude</url>) namespace to
+      include XML content from external files. This allows
+      <code>document</code> authors to embed other documents which may
+      be authored separately from the main document. There is no
+      simple method of doing this directly in either HTML or Pandoc
+      Markdown.</p>
+
+      <p>The next sections describes some simple transformations which
+      can be performed on the <code>document</code> markup format
+      using freely available open source tools. This report was itself
+      written in the <code>document</code> markup format&mdash;the
+      source code is available at <url>report.xml</url>.</p>
+    </section>
+
+    <!-- end section -->
+
+    <section>
+      <h1>Using OpenAPI pipelines for transformation</h1>
+
+      <p>The OpenAPI architecture helps to break tasks in data
+      analysis down into small pieces making it easier for people to
+      contribute to a data problem. The goal of the OpenAPI project is
+      to make it easier for people to connect with data. Meaningful
+      steps in a data workflow can be wrapped as modules. Modules can
+      be arranged in pipelines, and shared to be recombined by other
+      authors in their own pipelines. Pipelines and modules can be
+      executed by OpenAPI glue system software. The whole project is
+      open source, and open to contributions from anyone
+      (<a href="http://stattech.wordpress.fos.auckland.ac.nz/2015-01-introducing-openapi/">Introducing
+      OpenAPI</a>,
+      <a href="http://stattech.wordpress.fos.auckland.ac.nz/2016-08-openapi-version-0-6/">OpenAPI
+      version 0.6</a>).</p>
+
+      <p>It is OpenAPI's dividing of tasks into modules which makes it
+      an ideal candidate for handling document
+      transformation. Transforming the <code>document</code> format
+      described in the previouse section can be broken down into
+      several discrete steps:</p>
+
+      <ol>
+	<li>Merge XML code indicated by <code>xi:include</code>
+	elements into the document.</li>
+	<li>Convert XML character entities into appropriate
+	characters.</li>
+	<li>Convert document into output format language.</li>
+	<li>Execute embedded chunks of code.</li>
+      </ol>
+
+      <p>Several technologies already exist for handling each of these
+      steps. For example, the xmllint
+      (<url>http://www.xmlsoft.org/</url>) command line tool can
+      replace XInclude code, and replace entities with their
+      values. The xsltproc (ibid.) command line tool can be used to
+      apply an XSL stylesheet to the <code>document</code> to produce
+      the desired output format. The Knitr package in R can be used to
+      execute chunks of R code in various document formats.</p>
+
+      <p>What the OpenAPI architecture offers is the ability to wrap
+      transformation steps in a module which takes a file as an input,
+      and produces another file as an output. The output of one module
+      can be passed as the intput of another module, thus building a
+      pipeline which describes the entire transformation. Each module
+      in an OpenAPI pipeline specifies its execution language, meaning
+      an OpenAPI pipeline can have access to a wide variety of
+      tools.</p>
+
+      <p>In the following section I will descibe the modules used to
+      transform a tranformable <code>document</code> file to HTML
+      output, including the processing of chunks of R code. After this
+      section I will show how this pipeline can be modified to produce
+      PDF and Markdown output from the same source
+      <code>document</code>.</p>
+	
+      <h2>Transformation to HTML</h2>
+
+      <p>The docToHtml pipeline consists of ... <todo>what are the
+      modules?</todo></p>
+
+      <h3>Include referenced XML</h3>
+
+      <p></p>
+
+      <h3>XML entities</h3>
+
+      <h3>R code comments</h3>
+
+      <h3>Produce <code>.Rhtml</code> file</h3>
+
+      <h3>Produce <code>.html</code> file</h3>
+
+      <!-- end section -->
+      
+      <h2>Transformation to PDF</h2>
+
+      <h3>Do xinclude</h3>
+
+      <p></p>
+
+      <h3>XML entities</h3>
+
+      <h3>R code comments</h3>
+
+      <h3>Produce <code>.Rtex</code> file</h3>
+
+      <h3>Produce <code>.tex</code> file</h3>
+
+      <h3>Produce <code>.pdf</code> file</h3>
+
+    </section>
+
+    <!-- end section -->
+
+    <section>
+      <h1>Background</h1>
+    </section>
+
+    <!-- end section -->
+
+    <section>
+      <h1>Technical requirements</h1>
+
+      <p>This is an appendix section.</p>
+    </section>
+  </body>
+  
+</document>

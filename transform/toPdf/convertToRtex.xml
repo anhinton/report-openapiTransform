@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<module xmlns="http://www.openapi.org/2014/">
+  <language>bash</language>
+  <input name="report">
+    <file ref="report.xml"/>
+    <format formatType="text">XML file</format>
+  </input>
+  <input name="toRhtml">
+    <file ref="toRtex.xsl"/>
+    <format>XSL file</format>
+  </input>
+  <source>
+    <script><![CDATA[#! /bin/bash
+xsltproc -o report.Rtex toRtex.xsl report.xml]]></script>
+  </source>
+  <output name="report">
+    <file ref="report.Rtex"/>
+    <format formatType="text">Knitr TeX file</format>
+  </output>
+</module>

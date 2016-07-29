@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<pipeline xmlns="http://www.openapi.org/2014/">
+  <description>Convert transformable XML document to HTML</description>
+
+  <!-- components -->
+  <component name="xinclude" type="module">
+    <file ref="xinclude.xml"/>
+  </component>
+  <component name="texChars" type="module">
+    <file ref="texChars.xml"/>
+  </component>
+  <component name="substituteEntities" type="module">
+    <file ref="substituteEntities.xml"/>
+  </component>
+  <component name = "texCommentKnitr" type = "module">
+    <file ref = "texCommentKnitr.xml"/>
+  </component>
+  <component name = "convertToRtex" type = "module">
+    <file ref="convertToRtex.xml"/>
+  </component>
+  <component name = "knitToTex" type = "module">
+    <file ref="knitToTex.xml"/>
+  </component>
+  <component name = "texToPdf" type = "module">
+    <file ref = "texToPdf.xml"/>
+  </component>
+
+  <!-- pipes -->
+  <pipe>
+    <start component="xinclude" output="report"/>
+    <end component = "texChars" input = "report"/>
+  </pipe>
+  <pipe>
+    <start component = "texChars" output = "report"/>
+    <end component="substituteEntities" input="report"/>
+  </pipe>
+  <pipe>
+    <start component="substituteEntities" output="report"/>
+    <end component="texCommentKnitr" input="report"/>
+  </pipe>
+  <pipe>
+    <start component="texCommentKnitr" output="report"/>
+    <end component="convertToRtex" input="report"/>
+  </pipe>
+  <pipe>
+    <start component="convertToRtex" output="report"/>
+    <end component="knitToTex" input="report"/>
+  </pipe>
+  <pipe>
+    <start component = "knitToTex" output = "report"/>
+    <end component = "texToPdf" input = "report"/>
+  </pipe>
+  <pipe>
+    <start component = "knitToTex" output = "examples"/>
+    <end component = "texToPdf" input = "examples"/>
+  </pipe>
+</pipeline>
