@@ -6,10 +6,6 @@
     <file ref="report.Rhtml"/>
     <format>Knitr HTML file</format>
   </input>
-  <input name="examples">
-    <file ref = "examples"/>
-    <format>file directory</format>
-  </input>
   <source>
     <script><![CDATA[#! /usr/bin/Rscript
 library(knitr)

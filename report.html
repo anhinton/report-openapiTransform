@@ -225,15 +225,73 @@ mean(x)</code></pre>
 
       <h3>Include referenced XML</h3>
 
-      <p></p>
+      <p>The first module in the <code>toHtml</code> pipeline is the
+      <code>xinclude</code> module, which processes all of the
+      <code>&lt;xi:include&gt;</code> elements in the source document
+      and produces a document with the reference XML documents
+      inline. The <code>xinclude</code> module is a
+      <q>bash</q>-language module, and wraps a bash script which calls
+      the <code>xmllint</code> command-line tool to perform the
+      transformation. This module requires four input objects:
+      <q>report</q> which references the source document,
+      <a href="report.xml">report.xml</a>; <q>metadataExample</q> which references
+      the XML file <a href="metadataExample.xml">metadataExample.xml</a>;
+      <q>elementsExample</q> which references the XML file
+      <a href="elementsExample.xml">elementsExample.xml</a>; and <q>knitrExample</q> which
+      references the XML file <a href="knitrExample.xml">knitrExample.xml</a>. The module
+      produces a single output, <q>report</q>, which references the
+      transformed XML file produced by the transformation. The XML
+      source for the <code>xinclude</code> module can be found at
+      <a href="transform/toHtml/xinclude.xml">transform/toHtml/xinclude.xml</a>.</p>
 
       <h3>XML entities</h3>
 
-      <h3>R code comments</h3>
+      <p>The second transformation module in the pipeline is the
+      <code>substituteEntities</code> module. This module replaces the
+      XML entities in the source document with the values provided in
+      the document's doctype declaration. The
+      <code>substituteEntities</code> module is a <q>bash</q>-language
+      module with one input, <q>report</q>, an XML file provided by
+      the <code>xinclude</code> module. This module wraps a script
+      which uses the <code>xmllint</code> command-line tool to replace
+      the source documents XML entities with their values. The module
+      produces one output, <q>report</q>, which references the
+      transformed source XML file. The XML source for the
+      <code>substituteEntities</code> module can be found at
+      <a href="transform/toHtml/substituteEntities.xml">transform/toHtml/substituteEntities.xml</a>.</p>
 
       <h3>Produce <code>.Rhtml</code> file</h3>
 
+      <p>The third module in this pipeline is the
+      <code>convertToRhtml</code> module. This module transforms the
+      source document into an HTML document with Knitr R code
+      chunks. This module is a <q>bash</q>-language module with two
+      inputs: <q>report</q>, an XML file provided by the
+      <code>substituteEntities</code> module; and <q>toRhtml</q>,
+      which references an XSLT stylesheet file
+      <a href="xsl/toRhtml.xsl">xsl/toRhtml.xsl</a>, which describes the
+      transformation. The module wraps a script which uses the
+      <code>xsltproc</code> command-line tool to transform the source
+      document into a Knitr HTML file. The module produces one output,
+      <q>report</q>, which references the Knitr HTML file produced in
+      the transformation. The XML source for the
+      <code>convertToRhtml</code> module can be found at
+      <a href="transform/toHtml/convertToRhtml.xml">transform/toHtml/convertToRhtml.xml</a>.</p>
+
       <h3>Produce <code>.html</code> file</h3>
+
+      <p>The fourth module in the <code>toHtml</code> pipeline is the
+      <code>knitToHtml</code> module. This module executes the R code
+      chunks in a Knitr HTML file and returns the resulting HTML
+      file. This module is a <q>R</q>-language modules one input,
+      <q>report</q>, a Knitr HTML file provided by the
+      <code>convertToRhtml</code> module. The module wraps an R script
+      which call the <code>knit</code> function from the Knitr package
+      to execute the R code chunks and return an HTML file. The module
+      produces one output, <q>report</q>, which references the HTML
+      file produced by the module source script. The XML source for
+      the <code>knitToHtml</code> module can be found at
+      <a href="transform/toHtml/knitToHtml.xml">transform/toHtml/knitToHtml.xml</a>.</p>
 
       <!-- end section -->
       

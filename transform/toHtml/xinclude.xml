@@ -18,10 +18,6 @@
     <file ref="knitrExample.xml"/>
     <format formatType="text">XML file</format>
   </input>
-  <input name="examples">
-    <file ref="examples"/>
-    <format>file directory</format>
-  </input>
   <source>
     <script><![CDATA[#! /bin/bash
 xmllint --xinclude -o report.xml report.xml]]></script>
