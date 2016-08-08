@@ -1,6 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css">
+.knitr .inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.rimage .left {
+  text-align: left;
+}
+.rimage .right {
+  text-align: right;
+}
+.rimage .center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Transforming documents with OpenAPI pipelines</title>
 <meta name="author" content="Ashley Noel Hinton, Paul Murrell">
@@ -139,9 +201,12 @@ mean(x)]]&gt;&lt;/code&gt;
       <p>And the following is the result of executing this code
       chunk:</p>
 
-      <p><strong>TODO: EXECUTE R CODE:</strong></p>
-<pre><code>x &lt;- rnorm(n = 10)
-mean(x)</code></pre>
+<div class="chunk" id="knitrDemo"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">x</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rnorm</span><span class="hl std">(</span><span class="hl kwc">n</span> <span class="hl std">=</span> <span class="hl num">10</span><span class="hl std">)</span>
+<span class="hl kwd">mean</span><span class="hl std">(x)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] -0.06024998
+</pre></div>
+</div></div>
 
       <p>The <code>document</code> format also makes use of the
       <code>include</code> element from XInclude
@@ -220,8 +285,16 @@ mean(x)</code></pre>
 	
       <h2>Transformation to HTML</h2>
 
-      <p>The docToHtml pipeline consists of ... <strong>TODO: what are the
-      modules?</strong></p>
+      <p>The first pipeline example, <code>toHtml</code>, converts a
+      <code>document</code> source file to an HTML file with embedded
+      R code, and the results of executing this R code.</p>
+
+
+
+      <figure>
+	<img src="images/toHtml.png">
+	<figcaption>The toHtml pipeline</figcaption>
+      </figure>
 
       <h3>Include referenced XML</h3>
 
@@ -230,16 +303,16 @@ mean(x)</code></pre>
       <code>&lt;xi:include&gt;</code> elements in the source document
       and produces a document with the reference XML documents
       inline. The <code>xinclude</code> module is a
-      <q>bash</q>-language module, and wraps a bash script which calls
+      “bash”-language module, and wraps a bash script which calls
       the <code>xmllint</code> command-line tool to perform the
       transformation. This module requires four input objects:
-      <q>report</q> which references the source document,
-      <a href="report.xml">report.xml</a>; <q>metadataExample</q> which references
+      “report” which references the source document,
+      <a href="report.xml">report.xml</a>; “metadataExample” which references
       the XML file <a href="metadataExample.xml">metadataExample.xml</a>;
-      <q>elementsExample</q> which references the XML file
-      <a href="elementsExample.xml">elementsExample.xml</a>; and <q>knitrExample</q> which
+      “elementsExample” which references the XML file
+      <a href="elementsExample.xml">elementsExample.xml</a>; and “knitrExample” which
       references the XML file <a href="knitrExample.xml">knitrExample.xml</a>. The module
-      produces a single output, <q>report</q>, which references the
+      produces a single output, “report”, which references the
       transformed XML file produced by the transformation. The XML
       source for the <code>xinclude</code> module can be found at
       <a href="transform/toHtml/xinclude.xml">transform/toHtml/xinclude.xml</a>.</p>
@@ -250,12 +323,12 @@ mean(x)</code></pre>
       <code>substituteEntities</code> module. This module replaces the
       XML entities in the source document with the values provided in
       the document's doctype declaration. The
-      <code>substituteEntities</code> module is a <q>bash</q>-language
-      module with one input, <q>report</q>, an XML file provided by
+      <code>substituteEntities</code> module is a “bash”-language
+      module with one input, “report”, an XML file provided by
       the <code>xinclude</code> module. This module wraps a script
       which uses the <code>xmllint</code> command-line tool to replace
       the source documents XML entities with their values. The module
-      produces one output, <q>report</q>, which references the
+      produces one output, “report”, which references the
       transformed source XML file. The XML source for the
       <code>substituteEntities</code> module can be found at
       <a href="transform/toHtml/substituteEntities.xml">transform/toHtml/substituteEntities.xml</a>.</p>
@@ -265,15 +338,15 @@ mean(x)</code></pre>
       <p>The third module in this pipeline is the
       <code>convertToRhtml</code> module. This module transforms the
       source document into an HTML document with Knitr R code
-      chunks. This module is a <q>bash</q>-language module with two
-      inputs: <q>report</q>, an XML file provided by the
-      <code>substituteEntities</code> module; and <q>toRhtml</q>,
+      chunks. This module is a “bash”-language module with two
+      inputs: “report”, an XML file provided by the
+      <code>substituteEntities</code> module; and “toRhtml”,
       which references an XSLT stylesheet file
       <a href="xsl/toRhtml.xsl">xsl/toRhtml.xsl</a>, which describes the
       transformation. The module wraps a script which uses the
       <code>xsltproc</code> command-line tool to transform the source
       document into a Knitr HTML file. The module produces one output,
-      <q>report</q>, which references the Knitr HTML file produced in
+      “report”, which references the Knitr HTML file produced in
       the transformation. The XML source for the
       <code>convertToRhtml</code> module can be found at
       <a href="transform/toHtml/convertToRhtml.xml">transform/toHtml/convertToRhtml.xml</a>.</p>
@@ -283,12 +356,12 @@ mean(x)</code></pre>
       <p>The fourth module in the <code>toHtml</code> pipeline is the
       <code>knitToHtml</code> module. This module executes the R code
       chunks in a Knitr HTML file and returns the resulting HTML
-      file. This module is a <q>R</q>-language modules one input,
-      <q>report</q>, a Knitr HTML file provided by the
+      file. This module is a “R”-language modules one input,
+      “report”, a Knitr HTML file provided by the
       <code>convertToRhtml</code> module. The module wraps an R script
       which call the <code>knit</code> function from the Knitr package
       to execute the R code chunks and return an HTML file. The module
-      produces one output, <q>report</q>, which references the HTML
+      produces one output, “report”, which references the HTML
       file produced by the module source script. The XML source for
       the <code>knitToHtml</code> module can be found at
       <a href="transform/toHtml/knitToHtml.xml">transform/toHtml/knitToHtml.xml</a>.</p>

@@ -15,5 +15,9 @@ knit("report.Rhtml")]]></script>
     <file ref = "report.html"/>
     <format>HTML file</format>
   </output>
+  <output name = "toHtmlGraph">
+    <file ref = "toHtml.png"/>
+    <format>PNG file</format>
+  </output>
 </module>
 
