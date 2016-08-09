@@ -8,14 +8,14 @@ toHtml <- loadPipeline(name = "toHtml",
                        ref = "transform/toHtml/pipeline.xml")
 
 ## execute document to HTML pipeline
-pplRes1 <- runPipeline(toHtml, targetDirectory = tempdir())
+toHtmlRes1 <- runPipeline(toHtml, targetDirectory = tempdir())
 
 ## export pipeline result
-#tarball1 <- export(pplRes1)
+#tarball1 <- export(toHtmlRes1)
 
 ## copy final report.html to working directory
-file.copy(from = pplRes1$outputList$knitToHtml$report$ref, to = ".",
+file.copy(from = toHtmlRes1$outputList$knitToHtml$report$ref, to = ".",
           overwrite = TRUE)
 ## copy toHtml.png to images/ directory
-file.copy(from = pplRes1$outputList$knitToHtml$toHtmlGraph$ref, to = "images/",
-          overwrite = TRUE)
+file.copy(from = toHtmlRes1$outputList$knitToHtml$toHtmlGraph$ref,
+          to = ".", overwrite = TRUE)

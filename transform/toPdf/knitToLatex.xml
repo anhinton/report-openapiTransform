@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<module xmlns="http://www.openapi.org/2014/">
+  <language>R</language>
+  <description>Execute and convert Knitr TeX document to TeX</description>
+  <input name="report">
+    <file ref="report.Rtex"/>
+    <format>Knitr TeX file</format>
+  </input>
+  <source>
+    <script><![CDATA[#! /usr/bin/Rscript
+library(knitr)
+knit("report.Rtex")]]></script>
+  </source>
+  <output name = "report">
+    <file ref = "report.tex"/>
+    <format>TeX file</format>
+  </output>
+  <output name = "toHtmlGraph">
+    <file ref = "toHtml.png"/>
+    <format>PNG file</format>
+  </output>
+</module>

@@ -5,6 +5,7 @@
 <!ENTITY us "_">
 <!ENTITY tilde "~">
 <!ENTITY bar "|">
+<!ENTITY pcnt "&#37;">
 ]>
 <document xmlns:xi="http://www.w3.org/2001/XInclude">
   
@@ -223,7 +224,7 @@ dev.off()
 ]]></code>
 
       <figure>
-	<img src = "images/toHtml.png"/>
+	<img src = "toHtml.png"/>
 	<figcaption>The toHtml pipeline</figcaption>
       </figure>
 
@@ -287,7 +288,7 @@ dev.off()
       <p>The fourth module in the <code>toHtml</code> pipeline is the
       <code>knitToHtml</code> module. This module executes the R code
       chunks in a Knitr HTML file and returns the resulting HTML
-      file. This module is a <q>R</q>-language modules one input,
+      file. This module is a <q>R</q>-language module with one input,
       <q>report</q>, a Knitr HTML file provided by the
       <code>convertToRhtml</code> module. The module wraps an R script
       which call the <code>knit</code> function from the Knitr package
@@ -301,17 +302,69 @@ dev.off()
       
       <h2>Transformation to PDF</h2>
 
-      <h3>Do xinclude</h3>
+      <h3>Substitute LaTeX entity values</h3>
 
-      <p></p>
+      <p>The first new module in the <code>toPdf</code> pipeline is
+      the <code>texChars</code> module. This module replaces the
+      entity definitions in the source document doctype declaration
+      with values appropriate to LaTeX character typesetting&mdash;the
+      source document entity values are appropriate to HTML. This
+      module is a <q>bash</q>-language module with one input,
+      <q>report</q>, an XML file provided by the <code>xinclude</code>
+      module. The module wraps a bash script which substitutes the
+      entity values using the <code>sed</code> command-line tool. The
+      module produces one output, <q>report</q>, which references the
+      transformed XML file. The XML source for the
+      <code>latexChars.xml</code> module can be found at
+      <url>transform/toPdf/latexChars.xml</url>.</p>
 
       <h3>XML entities</h3>
 
+      <p>The <code>latexEntities</code> modules is identical to the
+      <code>substituteEntities</code> module in the
+      <code>toHtml</code> pipeline. It takes its input from the
+      <code>texChars</code> modules, and produces the output
+      <q>report</q>, which references the transformed source
+      document. The source XML for <code>latexEntities</code> is the
+      same as for <code>substituteEntities</code>,
+      <url>transform/toHtml/substituteEntities.xml</url>.</p>
+
       <h3>R code comments</h3>
+
+      <p>The <code>commentCode</code> module adds the LaTeX comment
+      character, <q>&pcnt;</q>, to the beginning of each line of R
+      code identified by <code>&lt;code class = "knitr"&lt;</code>, to
+      conform to the Knitr packages standards for R code chunks in a
+      Knitr LaTeX document. This module is an <q>R</q>-language module
+      with its one input, <q>report</q>, provided by the
+      <code>latexEntities</code> module. The module wraps a source
+      script which uses the XML package to perform the required
+      transformation on the <code>code</code> elements with class set
+      to <q>knitr</q>. The module produces one output, <q>report</q>,
+      which references the transformed source document. The XML source
+      for the <code>commentCode</code> module can be found at
+      <url>transform/toPdf/commentCode.xml</url>.</p>
 
       <h3>Produce <code>.Rtex</code> file</h3>
 
+      <p>The <code>convertToRtex</code> module transforms the source
+      XML document into a LaTeX document with Knitr R code
+      chunks. This module is a <q>bash</q>-language module with two
+      inputs: <q>report</q>, which is provided by the
+      <code>commentCode</code> module; and <q>toRtex</q>, which
+      references the XSLT stylesheet <url>xsl/toRtex.xsl</url>. The
+      module wraps a bash script which transforms the source document
+      to a LaTeX document using the command-line tool
+      <code>xsltproc</code>. The module produces one output,
+      <q>report</q>, which references the Knitr LaTeX file resulting
+      from the transformation. The XML source for the
+      <code>convertToRtex</code> module can be found at
+      <url>transform/toPdf/convertToRtex.xml</url>.</p>
+
       <h3>Produce <code>.tex</code> file</h3>
+
+      <p>The <code>knitToLatex</code> module executes the chunks of R
+      code in a Knitr LaTeX file and produces a LaTeX file.</p>
 
       <h3>Produce <code>.pdf</code> file</h3>
 

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <pipeline xmlns="http://www.openapi.org/2014/">
   <description>Convert transformable XML document to HTML</description>
+
+  <!--- COMPONENTS -->
   <component name="xinclude" type="module">
     <file ref="xinclude.xml"/>
   </component>
@@ -13,6 +15,23 @@
   <component name = "knitToHtml" type = "module">
     <file ref = "knitToHtml.xml"/>
   </component>
+  <component name = "latexChars" type = "module">
+    <file ref = "latexChars.xml"/>
+  </component>
+  <component name = "latexEntities" type = "module">
+    <file ref = "substituteEntities.xml"/>
+  </component>
+  <component name = "commentCode" type = "module">
+    <file ref = "commentCode.xml"/>
+  </component>
+  <component name = "convertToRtex" type = "module">
+    <file ref = "convertToRtex.xml"/>
+  </component>
+  <component name = "knitToLatex" type = "module">
+    <file ref = "knitToLatex.xml"/>
+  </component>
+  
+  <!-- PIPES -->
   <pipe>
     <start component="xinclude" output="report"/>
     <end component="substituteEntities" input="report"/>
@@ -24,5 +43,25 @@
   <pipe>
     <start component="convertToRhtml" output="report"/>
     <end component="knitToHtml" input="report"/>
+  </pipe>
+  <pipe>
+    <start component = "xinclude" output = "report"/>
+    <end component = "latexChars" input = "report"/>
+  </pipe>
+  <pipe>
+    <start component = "latexChars" output = "report"/>
+    <end component = "latexEntities" input = "report"/>
+  </pipe>
+  <pipe>
+    <start component = "latexEntities" output = "report"/>
+    <end component = "commentCode" input = "report"/>
+  </pipe>
+  <pipe>
+    <start component = "commentCode" output = "report"/>
+    <end component = "convertToRtex" input = "report"/>
+  </pipe>
+  <pipe>
+    <start component="convertToRtex" output="report"/>
+    <end component="knitToLatex" input="report"/>
   </pipe>
 </pipeline>
