@@ -203,28 +203,38 @@
       <code>document</code> source file to an HTML file with embedded
       R code, and the results of executing this R code.</p>
 
-      <code class = "knitr" name = "toHtmlGraph" options = "echo = FALSE, message = FALSE, results = 'hide'"><![CDATA[library(gridGraphviz)
+      <code class = "knitr" name = "toHtmlGraph"
+	    options = "echo = FALSE, message = FALSE, results = 'hide'">
+	<![CDATA[library(gridGraphviz)
 nodes <- structure(c("xinclude", "substituteEntities",
-                     "convertToRhtml", "knitToHtml"),
+                     "convertToRhtml", "knitToHtml",
+                     "report.xml", "report.html"),
                    .Names = c("xinclude", "substituteEntities",
-                              "convertToRhtml", "knitToHtml"))
+                              "convertToRhtml", "knitToHtml",
+                              "report.xml", "report.html"))
 edgeList <- structure(list(
     xinclude = "substituteEntities", substituteEntities = "convertToRhtml", 
-    convertToRhtml = "knitToHtml", knitToHtml = character(0)),
+    convertToRhtml = "knitToHtml", knitToHtml = "report.html",
+    `report.xml` = "xinclude",
+    `report.html` = character(0)),
     .Names = c("xinclude", "substituteEntities", "convertToRhtml",
-               "knitToHtml"))
+               "knitToHtml",
+               "report.xml", "report.html"))
 toHtmlGraph <- new("graphNEL", nodes = nodes, edgeL = edgeList,
                    edgemode = "directed")
-Ragraph <- agopenTrue(graph = toHtmlGraph, "",
-                      attrs= list(node = list(shape = "ellipse")))
-png("toHtml.png", width = graphWidth(Ragraph) * 96,
+Ragraph <- agopenTrue(
+    graph = toHtmlGraph, name = "",
+    attrs= list(node = list(shape = "ellipse")),
+    nodeAttrs = list(shape = c("report.xml" = "polygon",
+                               "report.html" = "polygon")))
+png("toHtmlGraph.png", width = graphWidth(Ragraph) * 96,
     height = graphHeight(Ragraph) * 96)
 grid.graph(Ragraph, newpage = TRUE)
 dev.off()
 ]]></code>
 
       <figure>
-	<img src = "toHtml.png"/>
+	<img src = "toHtmlGraph.png"/>
 	<figcaption>The toHtml pipeline</figcaption>
       </figure>
 
@@ -292,15 +302,74 @@ dev.off()
       <q>report</q>, a Knitr HTML file provided by the
       <code>convertToRhtml</code> module. The module wraps an R script
       which call the <code>knit</code> function from the Knitr package
-      to execute the R code chunks and return an HTML file. The module
-      produces one output, <q>report</q>, which references the HTML
-      file produced by the module source script. The XML source for
-      the <code>knitToHtml</code> module can be found at
-      <url>transform/toHtml/knitToHtml.xml</url>.</p>
+      to execute the R code chunks and returns an HTML file. The
+      module produces two outputs: <q>report</q>, which references the
+      HTML file produced by the module source script, and
+      <q>toHtmlGraph</q>, a PNG image file. <todo>update with
+      toPdfGraph AND propagate module to toPdf pipeline</todo>. The
+      XML source for the <code>knitToHtml</code> module can be found
+      at <url>transform/toHtml/knitToHtml.xml</url>.</p>
 
       <!-- end section -->
       
       <h2>Transformation to PDF</h2>
+
+      <p>The second pipeline example, <code>toPdf</code>, converts a
+      <code>document</code> source file to a LaTeX file</p>
+
+      <code class = "knitr" name = "toPdfGraph"
+	    options = "echo = FALSE, message = FALSE, results = 'hide'">
+      <![CDATA[nodes <- structure(
+    c("xinclude", "substituteEntities", "convertToRhtml", 
+      "knitToHtml", "latexChars", "latexEntities",
+      "commentCode", "convertToRtex", "knitToLatex", "latexToPdf",
+      "report.xml", "report.html", "report.pdf"),
+    .Names = c("xinclude", "substituteEntities",
+               "convertToRhtml", "knitToHtml", "latexChars",
+               "latexEntities", "commentCode", "convertToRtex",
+               "knitToLatex", "latexToPdf",
+               "report.xml", "report.html", "report.pdf"))
+edgeList <- structure(
+    list(xinclude = c("substituteEntities", "latexChars"),
+         substituteEntities = "convertToRhtml",
+         convertToRhtml = "knitToHtml",
+         knitToHtml = "report.html",
+         latexChars = "latexEntities", latexEntities = "commentCode",
+         commentCode = "convertToRtex", convertToRtex = "knitToLatex",
+         knitToLatex = c("latexToPdf", "latexToPdf"),
+         latexToPdf = "report.pdf",
+         `report.xml` = "xinclude",
+         `report.html` = character(0),
+         `report.pdf` = character(0)),
+    .Names = c("xinclude", "substituteEntities", "convertToRhtml",
+               "knitToHtml", "latexChars", "latexEntities", "commentCode",
+               "convertToRtex", "knitToLatex", "latexToPdf",
+               "report.xml", "report.html", "report.pdf"))
+toPdfGraph <- new("graphNEL", nodes = nodes, edgeL = edgeList,
+                   edgemode = "directed")
+Ragraph <- agopenTrue(
+    graph = toPdfGraph, name = "",
+    attrs = list(node = list(shape = "ellipse")),
+    nodeAttrs = list(shape = c("latexChars" = "hexagon",
+                               "latexEntities" = "hexagon",
+                               "commentCode" = "hexagon",
+                               "convertToRtex" = "hexagon",
+                               "knitToLatex" = "hexagon",
+                               "latexToPdf" = "hexagon",
+                               "report.xml" = "polygon",
+                               "report.html" = "polygon",
+                               "report.pdf" = "polygon"
+                               )))
+png("toPdfGraph.png", width = graphWidth(Ragraph) * 96,
+     height = graphHeight(Ragraph) * 96)
+grid.graph(Ragraph, newpage = TRUE)
+dev.off()
+]]></code>
+
+      <figure>
+	<img src = "toPdfGraph.png"/>
+	<figcaption>The toPdf pipeline</figcaption>
+      </figure>
 
       <h3>Substitute LaTeX entity values</h3>
 
@@ -364,9 +433,30 @@ dev.off()
       <h3>Produce <code>.tex</code> file</h3>
 
       <p>The <code>knitToLatex</code> module executes the chunks of R
-      code in a Knitr LaTeX file and produces a LaTeX file.</p>
+      code in a Knitr LaTeX file and produces a LaTeX file. This is an
+      <q>R</q>-language module with a single input, <q>report</q>,
+      provided by the <code>convertToRtex</code> module. The module
+      wraps an R script which call the <code>knit</code> function from
+      the Knitr package to execute the R code chunks and returns a
+      LaTeX file. The module produces two outputs: <q>report</q>,
+      which references the LaTeX file produced; and
+      <q>toHtmlGraph</q>, a PNG image file. <todo>update with
+      toPdfGraph</todo>. The XML source for the
+      <code>knitToLatex</code> module can be found at
+      <url>transform/toPdf/knitToLatex.xml</url>.</p>
 
       <h3>Produce <code>.pdf</code> file</h3>
+
+      <p>The <code>latexToPdf</code> module produces a PDF file from a
+      LaTeX source file. This is a <q>bash</q>-language module with
+      two inputs: <q>report</q> and <q>toHtmlGraph</q>, which are
+      provided by the <code>knitToLatex</code> module. <todo>update
+      with toPdfGraph</todo>. The module wraps a bash script which
+      produces a PDF file using the <code>pdflatex</code> command-line
+      tool. The module produces one output, <q>report</q>, the PDF
+      file produced from the LaTeX source file. The XML source for the
+      <code>latexToPdf</code> module can be found at
+      <url>transform/toPdf/latexToPdf.xml</url>.</p>
 
     </section>
 

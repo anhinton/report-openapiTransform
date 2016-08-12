@@ -16,6 +16,9 @@ toHtmlRes1 <- runPipeline(toHtml, targetDirectory = tempdir())
 ## copy final report.html to working directory
 file.copy(from = toHtmlRes1$outputList$knitToHtml$report$ref, to = ".",
           overwrite = TRUE)
-## copy toHtml.png to images/ directory
+## copy toHtmlGraph.png to working directory
 file.copy(from = toHtmlRes1$outputList$knitToHtml$toHtmlGraph$ref,
+          to = ".", overwrite = TRUE)
+## copy toPdfGraph.png to current directory
+file.copy(from = toHtmlRes1$outputList$knitToHtml$toPdfGraph$ref,
           to = ".", overwrite = TRUE)

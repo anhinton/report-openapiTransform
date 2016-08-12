@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Time-stamp: "2016-07-13 12:25:52 ahin017"-->
+<!-- Time-stamp: "2016-08-12 16:17:49 ashley"-->
 <!DOCTYPE document [
 <!ENTITY nl "&#xA;">
 ]>
@@ -141,12 +141,19 @@
     <xsl:apply-templates select="node()"/>
   </xsl:template>
 
+  <xsl:template match="ol">
+    <xsl:text>\begin{enumerate}</xsl:text>
+    <xsl:apply-templates select="node()"/>
+    <xsl:text>\end{enumerate}&nl;</xsl:text>
+  </xsl:template>
+
   <xsl:template match="p">
     <xsl:apply-templates select="node()"/>
     <xsl:text>&nl;</xsl:text>
   </xsl:template>
 
   <xsl:template match="pre">
+    <xsl:text>\small</xsl:text>
     <xsl:text>\begin{verbatim}</xsl:text>
     <xsl:choose>
       <xsl:when test="code">
@@ -156,7 +163,8 @@
 	<xsl:value-of select="node()"/>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>\end{verbatim}&nl;</xsl:text>
+    <xsl:text>\end{verbatim}</xsl:text>
+    <xsl:text>\normalsize&nl;</xsl:text>
   </xsl:template>
 
   <xsl:template match="section">    

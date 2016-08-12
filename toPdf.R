@@ -13,6 +13,6 @@ toPdfRes1 <- runPipeline(toPdf, targetDirectory = tempdir())
 ## export pipeline result
 #tarball1 <- export(toPdfRes1)
 
-## ## copy final report.html to working directory
-## file.copy(from = toPdfRes1$outputList$knitToHtml$report$ref, to = ".",
-##           overwrite = TRUE)
+## copy final report.pdf to working directory
+file.copy(from = toPdfRes1$outputList$latexToPdf$report$ref, to = ".",
+          overwrite = TRUE)
