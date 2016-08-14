@@ -1,68 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css">
-.knitr .inline {
-  background-color: #f7f7f7;
-  border:solid 1px #B0B0B0;
-}
-.error {
-	font-weight: bold;
-	color: #FF0000;
-}
-.warning {
-	font-weight: bold;
-}
-.message {
-	font-style: italic;
-}
-.source, .output, .warning, .error, .message {
-	padding: 0 1em;
-  border:solid 1px #F7F7F7;
-}
-.source {
-  background-color: #f5f5f5;
-}
-.rimage .left {
-  text-align: left;
-}
-.rimage .right {
-  text-align: right;
-}
-.rimage .center {
-  text-align: center;
-}
-.hl.num {
-  color: #AF0F91;
-}
-.hl.str {
-  color: #317ECC;
-}
-.hl.com {
-  color: #AD95AF;
-  font-style: italic;
-}
-.hl.opt {
-  color: #000000;
-}
-.hl.std {
-  color: #585858;
-}
-.hl.kwa {
-  color: #295F94;
-  font-weight: bold;
-}
-.hl.kwb {
-  color: #B05A65;
-}
-.hl.kwc {
-  color: #55aa55;
-}
-.hl.kwd {
-  color: #BC5A65;
-  font-weight: bold;
-}
-</style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Transforming documents with OpenAPI pipelines</title>
 <meta name="author" content="Ashley Noel Hinton, Paul Murrell">
@@ -202,12 +140,10 @@ mean(x)]]&gt;&lt;/code&gt;
       <p>And the following is the result of executing this code
       chunk:</p>
 
-<div class="chunk" id="knitrDemo"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">x</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rnorm</span><span class="hl std">(</span><span class="hl kwc">n</span> <span class="hl std">=</span> <span class="hl num">10</span><span class="hl std">)</span>
-<span class="hl kwd">mean</span><span class="hl std">(x)</span>
-</pre></div>
-<div class="output"><pre class="knitr r">## [1] 0.1950684
-</pre></div>
-</div></div>
+      <p><strong>TODO: EXECUTE R CODE:</strong></p>
+<pre><code>
+x &lt;- rnorm(n = 10)
+mean(x)</code></pre>
 
       <p>The <code>document</code> format also makes use of the
       <code>include</code> element from XInclude
@@ -284,18 +220,56 @@ mean(x)]]&gt;&lt;/code&gt;
       PDF and Markdown output from the same source
       <code>document</code>.</p>
 	
-      <h2>Transformation to HTML</h2>
+      <h2 id="toHtmlPipeline">Transformation to HTML</h2>
 
       <p>The first pipeline example, <code>toHtml</code>, converts a
-      <code>document</code> source file to an HTML file with embedded
-      R code, and the results of executing this R code.</p>
+      <code>document</code> source file to an HTML file. The pipeline
+      also executes the R code embedded in the source document. <a href="#figure1">Figure 1</a> shows a graph of the
+      <code>toHtml</code>, which consists of four modules
+      (ellipse-shaped nodes). The source <code>document</code>,
+      <q>report.xml</q>, is provided as in input to the pipeline, and
+      the ouptut document, <q>report.html</q>, is produced as an
+      output from the final module. The source XML for the
+      <code>toHtml</code> pipeline can be found at
+      <a href="transform/toHtml/pipeline.xml">transform/toHtml/pipeline.xml</a>.</p>
 
+      <p><strong>TODO: EXECUTE R CODE:</strong></p>
+<pre><code>
+	library(gridGraphviz)
+nodes &lt;- structure(c("xinclude", "substituteEntities",
+                     "convertToRhtml", "knitToHtml",
+                     "report.xml", "report.html"),
+                   .Names = c("xinclude", "substituteEntities",
+                              "convertToRhtml", "knitToHtml",
+                              "report.xml", "report.html"))
+edgeList &lt;- structure(list(
+    xinclude = "substituteEntities", substituteEntities = "convertToRhtml", 
+    convertToRhtml = "knitToHtml", knitToHtml = "report.html",
+    `report.xml` = "xinclude",
+    `report.html` = character(0)),
+    .Names = c("xinclude", "substituteEntities", "convertToRhtml",
+               "knitToHtml",
+               "report.xml", "report.html"))
+toHtmlGraph &lt;- new("graphNEL", nodes = nodes, edgeL = edgeList,
+                   edgemode = "directed")
+Ragraph &lt;- agopenTrue(
+    graph = toHtmlGraph, name = "",
+    attrs= list(node = list(shape = "ellipse")),
+    nodeAttrs = list(shape = c("report.xml" = "polygon",
+                               "report.html" = "polygon")))
+png("toHtmlGraph.png", width = graphWidth(Ragraph) * 96,
+    height = graphHeight(Ragraph) * 96)
+grid.graph(Ragraph, newpage = TRUE)
+dev.off()
+</code></pre>
 
-
-      <figure>
+      <figure id="figure1">
 	<img src="toHtmlGraph.png">
-	<figcaption>The toHtml pipeline</figcaption>
+	<figcaption>Figure 1: the toHtml pipeline</figcaption>
       </figure>
+
+      <p>The following sections describe the details of the modules
+      used in the <code>toHtml</code> pipeline.</p>
 
       <h3>Include referenced XML</h3>
 
@@ -304,16 +278,16 @@ mean(x)]]&gt;&lt;/code&gt;
       <code>&lt;xi:include&gt;</code> elements in the source document
       and produces a document with the reference XML documents
       inline. The <code>xinclude</code> module is a
-      “bash”-language module, and wraps a bash script which calls
+      <q>bash</q>-language module, and wraps a bash script which calls
       the <code>xmllint</code> command-line tool to perform the
       transformation. This module requires four input objects:
-      “report” which references the source document,
-      <a href="report.xml">report.xml</a>; “metadataExample” which references
+      <q>report</q> which references the source document,
+      <a href="report.xml">report.xml</a>; <q>metadataExample</q> which references
       the XML file <a href="metadataExample.xml">metadataExample.xml</a>;
-      “elementsExample” which references the XML file
-      <a href="elementsExample.xml">elementsExample.xml</a>; and “knitrExample” which
+      <q>elementsExample</q> which references the XML file
+      <a href="elementsExample.xml">elementsExample.xml</a>; and <q>knitrExample</q> which
       references the XML file <a href="knitrExample.xml">knitrExample.xml</a>. The module
-      produces a single output, “report”, which references the
+      produces a single output, <q>report</q>, which references the
       transformed XML file produced by the transformation. The XML
       source for the <code>xinclude</code> module can be found at
       <a href="transform/toHtml/xinclude.xml">transform/toHtml/xinclude.xml</a>.</p>
@@ -324,12 +298,12 @@ mean(x)]]&gt;&lt;/code&gt;
       <code>substituteEntities</code> module. This module replaces the
       XML entities in the source document with the values provided in
       the document's doctype declaration. The
-      <code>substituteEntities</code> module is a “bash”-language
-      module with one input, “report”, an XML file provided by
+      <code>substituteEntities</code> module is a <q>bash</q>-language
+      module with one input, <q>report</q>, an XML file provided by
       the <code>xinclude</code> module. This module wraps a script
       which uses the <code>xmllint</code> command-line tool to replace
       the source documents XML entities with their values. The module
-      produces one output, “report”, which references the
+      produces one output, <q>report</q>, which references the
       transformed source XML file. The XML source for the
       <code>substituteEntities</code> module can be found at
       <a href="transform/toHtml/substituteEntities.xml">transform/toHtml/substituteEntities.xml</a>.</p>
@@ -339,15 +313,15 @@ mean(x)]]&gt;&lt;/code&gt;
       <p>The third module in this pipeline is the
       <code>convertToRhtml</code> module. This module transforms the
       source document into an HTML document with Knitr R code
-      chunks. This module is a “bash”-language module with two
-      inputs: “report”, an XML file provided by the
-      <code>substituteEntities</code> module; and “toRhtml”,
+      chunks. This module is a <q>bash</q>-language module with two
+      inputs: <q>report</q>, an XML file provided by the
+      <code>substituteEntities</code> module; and <q>toRhtml</q>,
       which references an XSLT stylesheet file
       <a href="xsl/toRhtml.xsl">xsl/toRhtml.xsl</a>, which describes the
       transformation. The module wraps a script which uses the
       <code>xsltproc</code> command-line tool to transform the source
       document into a Knitr HTML file. The module produces one output,
-      “report”, which references the Knitr HTML file produced in
+      <q>report</q>, which references the Knitr HTML file produced in
       the transformation. The XML source for the
       <code>convertToRhtml</code> module can be found at
       <a href="transform/toHtml/convertToRhtml.xml">transform/toHtml/convertToRhtml.xml</a>.</p>
@@ -357,27 +331,86 @@ mean(x)]]&gt;&lt;/code&gt;
       <p>The fourth module in the <code>toHtml</code> pipeline is the
       <code>knitToHtml</code> module. This module executes the R code
       chunks in a Knitr HTML file and returns the resulting HTML
-      file. This module is a “R”-language module with one input,
-      “report”, a Knitr HTML file provided by the
+      file. This module is a <q>R</q>-language module with one input,
+      <q>report</q>, a Knitr HTML file provided by the
       <code>convertToRhtml</code> module. The module wraps an R script
       which call the <code>knit</code> function from the Knitr package
       to execute the R code chunks and returns an HTML file. The
-      module produces two outputs: “report”, which references the
+      module produces two outputs: <q>report</q>, which references the
       HTML file produced by the module source script, and
-      “toHtmlGraph”, a PNG image file. . The
+      <q>toHtmlGraph</q>, a PNG image file. <strong>TODO: update with
+      toPdfGraph AND propagate module to toPdf pipeline</strong>. The
       XML source for the <code>knitToHtml</code> module can be found
       at <a href="transform/toHtml/knitToHtml.xml">transform/toHtml/knitToHtml.xml</a>.</p>
 
       <!-- end section -->
       
-      <h2>Transformation to PDF</h2>
+      <h2 id="toPdfPipeline">Transformation to PDF</h2>
 
       <p>The second pipeline example, <code>toPdf</code>, converts a
-      <code>document</code> source file to a LaTeX file</p>
+      <code>document</code> source file to a LaTeX file. This pipeline
+      also converts the source document to an HTML file, as in the <a href="#toHtmlPipeline"><code>toHtml</code> pipeline</a>. In
+      fact, the <code>toPdf</code> pipeline is an extension of the
+      <code>toHtml</code> pipeline. <a href="#figure2">Figure 2</a>
+      shows a graph of the <code>toPdf</code> pipeline. The
+      ellipse-shaped nodes show the same modules as in the
+      <code>toHtml</code> pipeline. The hexagon-shaped nodes show the
+      six new modules which are used to produce PDF output. This
+      pipeline will produce the output document <q>report.pdf</q> as a
+      module output, as well as <q>report.html</q> as before. The XML
+      source for the <code>toPdf</code> pipeline can be found at
+      <a href="transform/toPdf/pipeline.xml">transform/toPdf/pipeline.xml</a>.</p>
 
+      <p><strong>TODO: EXECUTE R CODE:</strong></p>
+<pre><code>
+      nodes &lt;- structure(
+    c("xinclude", "substituteEntities", "convertToRhtml", 
+      "knitToHtml", "latexChars", "latexEntities",
+      "commentCode", "convertToRtex", "knitToLatex", "latexToPdf",
+      "report.xml", "report.html", "report.pdf"),
+    .Names = c("xinclude", "substituteEntities",
+               "convertToRhtml", "knitToHtml", "latexChars",
+               "latexEntities", "commentCode", "convertToRtex",
+               "knitToLatex", "latexToPdf",
+               "report.xml", "report.html", "report.pdf"))
+edgeList &lt;- structure(
+    list(xinclude = c("substituteEntities", "latexChars"),
+         substituteEntities = "convertToRhtml",
+         convertToRhtml = "knitToHtml",
+         knitToHtml = "report.html",
+         latexChars = "latexEntities", latexEntities = "commentCode",
+         commentCode = "convertToRtex", convertToRtex = "knitToLatex",
+         knitToLatex = c("latexToPdf", "latexToPdf"),
+         latexToPdf = "report.pdf",
+         `report.xml` = "xinclude",
+         `report.html` = character(0),
+         `report.pdf` = character(0)),
+    .Names = c("xinclude", "substituteEntities", "convertToRhtml",
+               "knitToHtml", "latexChars", "latexEntities", "commentCode",
+               "convertToRtex", "knitToLatex", "latexToPdf",
+               "report.xml", "report.html", "report.pdf"))
+toPdfGraph &lt;- new("graphNEL", nodes = nodes, edgeL = edgeList,
+                   edgemode = "directed")
+Ragraph &lt;- agopenTrue(
+    graph = toPdfGraph, name = "",
+    attrs = list(node = list(shape = "ellipse")),
+    nodeAttrs = list(shape = c("latexChars" = "hexagon",
+                               "latexEntities" = "hexagon",
+                               "commentCode" = "hexagon",
+                               "convertToRtex" = "hexagon",
+                               "knitToLatex" = "hexagon",
+                               "latexToPdf" = "hexagon",
+                               "report.xml" = "polygon",
+                               "report.html" = "polygon",
+                               "report.pdf" = "polygon"
+                               )))
+png("toPdfGraph.png", width = graphWidth(Ragraph) * 96,
+     height = graphHeight(Ragraph) * 96)
+grid.graph(Ragraph, newpage = TRUE)
+dev.off()
+</code></pre>
 
-
-      <figure>
+      <figure id="figure2">
 	<img src="toPdfGraph.png">
 	<figcaption>The toPdf pipeline</figcaption>
       </figure>
@@ -389,11 +422,11 @@ mean(x)]]&gt;&lt;/code&gt;
       entity definitions in the source document doctype declaration
       with values appropriate to LaTeX character typesetting—the
       source document entity values are appropriate to HTML. This
-      module is a “bash”-language module with one input,
-      “report”, an XML file provided by the <code>xinclude</code>
+      module is a <q>bash</q>-language module with one input,
+      <q>report</q>, an XML file provided by the <code>xinclude</code>
       module. The module wraps a bash script which substitutes the
       entity values using the <code>sed</code> command-line tool. The
-      module produces one output, “report”, which references the
+      module produces one output, <q>report</q>, which references the
       transformed XML file. The XML source for the
       <code>latexChars.xml</code> module can be found at
       <a href="transform/toPdf/latexChars.xml">transform/toPdf/latexChars.xml</a>.</p>
@@ -404,7 +437,7 @@ mean(x)]]&gt;&lt;/code&gt;
       <code>substituteEntities</code> module in the
       <code>toHtml</code> pipeline. It takes its input from the
       <code>texChars</code> modules, and produces the output
-      “report”, which references the transformed source
+      <q>report</q>, which references the transformed source
       document. The source XML for <code>latexEntities</code> is the
       same as for <code>substituteEntities</code>,
       <a href="transform/toHtml/substituteEntities.xml">transform/toHtml/substituteEntities.xml</a>.</p>
@@ -412,15 +445,15 @@ mean(x)]]&gt;&lt;/code&gt;
       <h3>R code comments</h3>
 
       <p>The <code>commentCode</code> module adds the LaTeX comment
-      character, “%”, to the beginning of each line of R
+      character, <q>%</q>, to the beginning of each line of R
       code identified by <code>&lt;code class = "knitr"&lt;</code>, to
       conform to the Knitr packages standards for R code chunks in a
-      Knitr LaTeX document. This module is an “R”-language module
-      with its one input, “report”, provided by the
+      Knitr LaTeX document. This module is an <q>R</q>-language module
+      with its one input, <q>report</q>, provided by the
       <code>latexEntities</code> module. The module wraps a source
       script which uses the XML package to perform the required
       transformation on the <code>code</code> elements with class set
-      to “knitr”. The module produces one output, “report”,
+      to <q>knitr</q>. The module produces one output, <q>report</q>,
       which references the transformed source document. The XML source
       for the <code>commentCode</code> module can be found at
       <a href="transform/toPdf/commentCode.xml">transform/toPdf/commentCode.xml</a>.</p>
@@ -429,14 +462,14 @@ mean(x)]]&gt;&lt;/code&gt;
 
       <p>The <code>convertToRtex</code> module transforms the source
       XML document into a LaTeX document with Knitr R code
-      chunks. This module is a “bash”-language module with two
-      inputs: “report”, which is provided by the
-      <code>commentCode</code> module; and “toRtex”, which
+      chunks. This module is a <q>bash</q>-language module with two
+      inputs: <q>report</q>, which is provided by the
+      <code>commentCode</code> module; and <q>toRtex</q>, which
       references the XSLT stylesheet <a href="xsl/toRtex.xsl">xsl/toRtex.xsl</a>. The
       module wraps a bash script which transforms the source document
       to a LaTeX document using the command-line tool
       <code>xsltproc</code>. The module produces one output,
-      “report”, which references the Knitr LaTeX file resulting
+      <q>report</q>, which references the Knitr LaTeX file resulting
       from the transformation. The XML source for the
       <code>convertToRtex</code> module can be found at
       <a href="transform/toPdf/convertToRtex.xml">transform/toPdf/convertToRtex.xml</a>.</p>
@@ -445,24 +478,26 @@ mean(x)]]&gt;&lt;/code&gt;
 
       <p>The <code>knitToLatex</code> module executes the chunks of R
       code in a Knitr LaTeX file and produces a LaTeX file. This is an
-      “R”-language module with a single input, “report”,
+      <q>R</q>-language module with a single input, <q>report</q>,
       provided by the <code>convertToRtex</code> module. The module
       wraps an R script which call the <code>knit</code> function from
       the Knitr package to execute the R code chunks and returns a
-      LaTeX file. The module produces two outputs: “report”,
+      LaTeX file. The module produces two outputs: <q>report</q>,
       which references the LaTeX file produced; and
-      “toHtmlGraph”, a PNG image file. . The XML source for the
+      <q>toHtmlGraph</q>, a PNG image file. <strong>TODO: update with
+      toPdfGraph</strong>. The XML source for the
       <code>knitToLatex</code> module can be found at
       <a href="transform/toPdf/knitToLatex.xml">transform/toPdf/knitToLatex.xml</a>.</p>
 
       <h3>Produce <code>.pdf</code> file</h3>
 
       <p>The <code>latexToPdf</code> module produces a PDF file from a
-      LaTeX source file. This is a “bash”-language module with
-      two inputs: “report” and “toHtmlGraph”, which are
-      provided by the <code>knitToLatex</code> module. . The module wraps a bash script which
+      LaTeX source file. This is a <q>bash</q>-language module with
+      two inputs: <q>report</q> and <q>toHtmlGraph</q>, which are
+      provided by the <code>knitToLatex</code> module. <strong>TODO: update
+      with toPdfGraph</strong>. The module wraps a bash script which
       produces a PDF file using the <code>pdflatex</code> command-line
-      tool. The module produces one output, “report”, the PDF
+      tool. The module produces one output, <q>report</q>, the PDF
       file produced from the LaTeX source file. The XML source for the
       <code>latexToPdf</code> module can be found at
       <a href="transform/toPdf/latexToPdf.xml">transform/toPdf/latexToPdf.xml</a>.</p>

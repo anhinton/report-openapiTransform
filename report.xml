@@ -197,11 +197,19 @@
       PDF and Markdown output from the same source
       <code>document</code>.</p>
 	
-      <h2>Transformation to HTML</h2>
+      <h2 id="toHtmlPipeline">Transformation to HTML</h2>
 
       <p>The first pipeline example, <code>toHtml</code>, converts a
-      <code>document</code> source file to an HTML file with embedded
-      R code, and the results of executing this R code.</p>
+      <code>document</code> source file to an HTML file. The pipeline
+      also executes the R code embedded in the source document. <a
+      href="#figure1">Figure 1</a> shows a graph of the
+      <code>toHtml</code>, which consists of four modules
+      (ellipse-shaped nodes). The source <code>document</code>,
+      <q>report.xml</q>, is provided as in input to the pipeline, and
+      the ouptut document, <q>report.html</q>, is produced as an
+      output from the final module. The source XML for the
+      <code>toHtml</code> pipeline can be found at
+      <url>transform/toHtml/pipeline.xml</url>.</p>
 
       <code class = "knitr" name = "toHtmlGraph"
 	    options = "echo = FALSE, message = FALSE, results = 'hide'">
@@ -233,10 +241,13 @@ grid.graph(Ragraph, newpage = TRUE)
 dev.off()
 ]]></code>
 
-      <figure>
+      <figure id="figure1">
 	<img src = "toHtmlGraph.png"/>
-	<figcaption>The toHtml pipeline</figcaption>
+	<figcaption>Figure 1: the toHtml pipeline</figcaption>
       </figure>
+
+      <p>The following sections describe the details of the modules
+      used in the <code>toHtml</code> pipeline.</p>
 
       <h3>Include referenced XML</h3>
 
@@ -312,10 +323,22 @@ dev.off()
 
       <!-- end section -->
       
-      <h2>Transformation to PDF</h2>
+      <h2 id="toPdfPipeline">Transformation to PDF</h2>
 
       <p>The second pipeline example, <code>toPdf</code>, converts a
-      <code>document</code> source file to a LaTeX file</p>
+      <code>document</code> source file to a LaTeX file. This pipeline
+      also converts the source document to an HTML file, as in the <a
+      href="#toHtmlPipeline"><code>toHtml</code> pipeline</a>. In
+      fact, the <code>toPdf</code> pipeline is an extension of the
+      <code>toHtml</code> pipeline. <a href="#figure2">Figure 2</a>
+      shows a graph of the <code>toPdf</code> pipeline. The
+      ellipse-shaped nodes show the same modules as in the
+      <code>toHtml</code> pipeline. The hexagon-shaped nodes show the
+      six new modules which are used to produce PDF output. This
+      pipeline will produce the output document <q>report.pdf</q> as a
+      module output, as well as <q>report.html</q> as before. The XML
+      source for the <code>toPdf</code> pipeline can be found at
+      <url>transform/toPdf/pipeline.xml</url>.</p>
 
       <code class = "knitr" name = "toPdfGraph"
 	    options = "echo = FALSE, message = FALSE, results = 'hide'">
@@ -366,7 +389,7 @@ grid.graph(Ragraph, newpage = TRUE)
 dev.off()
 ]]></code>
 
-      <figure>
+      <figure id="figure2">
 	<img src = "toPdfGraph.png"/>
 	<figcaption>The toPdf pipeline</figcaption>
       </figure>
