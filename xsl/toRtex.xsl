@@ -100,12 +100,6 @@
     <xsl:text>&nl;%% end.rcode</xsl:text>
   </xsl:template>
 
-  <xsl:template match="em">
-    <xsl:text>\emph{</xsl:text>
-    <xsl:apply-templates select="node()"/>
-    <xsl:text>}</xsl:text>
-  </xsl:template>
-
   <xsl:template match="figure">
     <xsl:text>\begin{figure}&nl;</xsl:text>
     <xsl:text>\centering&nl;</xsl:text>
