@@ -27,15 +27,14 @@
       <p>In <a
       href="http://stattech.wordpress.fos.auckland.ac.nz/2016-10-a-transformable-markup-document-format/">A
       transformable markup document format</a> the authors proposed
-      that an a markup <code>document</code> format written using XML
+      that a markup <code>document</code> format written using XML
       would make a good source format for authoring documents to be
       transformed to various output formats, including HTML and
-      PDF. In this report we suggested OpenAPI pipelines could provide
-      a means of managing multiple transformations on these
-      <code>document</code>s. This reports describes how an OpenAPI
-      pipeline provides a sensible means of managing document
-      transformation, and describes two example transformation
-      pipelines.</p>
+      PDF. We suggested OpenAPI pipelines could provide a means of
+      managing multiple transformations on these documents. This
+      reports describes how an OpenAPI pipeline provides a sensible
+      means of managing document transformation, and describes two
+      example transformation pipelines.</p>
             
     </section>
 
@@ -62,7 +61,7 @@
       an ideal candidate for handling document transformation. In <a
       href="http://stattech.wordpress.fos.auckland.ac.nz/2016-10-a-transformable-markup-document-format/">A
       transformable markup document format</a> we described how the
-      authot of a transformable markup <code>document</code> author
+      author of a transformable markup <code>document</code> author
       may wish to perform multiple discrete transformations. For
       example, an author wishing to produce an HTML document may wish
       to performm the following transformations:</p>
@@ -183,7 +182,7 @@
 	<xi:fallback><todo>xinclude knitrExample.xml</todo></xi:fallback>
       </xi:include></code></pre>
 
-      <p>And the following is the result of executing this code
+      <p>The following is the result of executing this R code
       chunk:</p>
 
       <xi:include href="knitrExample.xml" parse="xml">
@@ -195,9 +194,7 @@
       (<url>http://www.w3.org/2001/XInclude</url>) namespace to
       include XML content from external files. This allows
       <code>document</code> authors to embed other documents which may
-      be authored separately from the main document. There is no
-      simple method of doing this directly in either HTML or Pandoc
-      Markdown.</p>
+      be authored separately from the main document.</p>
 
       <p>As the <code>document</code> format used in this report will
       be used to produce both HTML and PDF output, XML entities have
@@ -254,7 +251,7 @@
 
       <code class = "knitr" name = "toHtmlGraph"
 	    options = "echo = FALSE, message = FALSE, results = 'hide'">
-	<![CDATA[library(gridGraphviz)
+<![CDATA[library(gridGraphviz)
 nodes <- structure(c("xinclude", "substituteEntities",
                      "convertToRhtml", "knitToHtml",
                      "report.xml", "report.html"),
@@ -321,7 +318,7 @@ dev.off()
       module with one input, <q>report</q>, an XML file provided by
       the <code>xinclude</code> module. This module wraps a script
       which uses the <code>xmllint</code> command-line tool to replace
-      the source documents XML entities with their values. The module
+      the source document's XML entities with their values. The module
       produces one output, <q>report</q>, which references the
       transformed source XML file. The XML source for the
       <code>substituteEntities</code> module can be found at
