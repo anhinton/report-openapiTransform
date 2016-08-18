@@ -524,15 +524,19 @@ dev.off()
     <!-- end section -->
 
     <section>
-      <h1>Background</h1>
+      <h1>Summary</h1>
     </section>
 
     <!-- end section -->
 
     <section>
       <h1>Technical requirements</h1>
+    </section>
 
-      <p>This is an appendix section.</p>
+    <!-- end section -->
+
+    <section>
+      <h1>Resources</h1>
     </section>
   </body>
   
