@@ -57,20 +57,20 @@
       <a href="http://stattech.wordpress.fos.auckland.ac.nz/2016-08-openapi-version-0-6/">OpenAPI
       version 0.6</a>).</p>
 
-      <p>It is OpenAPI's dividing of tasks into modules which makes it
+      <p>It is OpenAPI's dividing of tasks into modules that makes it
       an ideal candidate for handling document transformation. In <a
       href="http://stattech.wordpress.fos.auckland.ac.nz/2016-10-a-transformable-markup-document-format/">A
       transformable markup document format</a> we described how the
-      author of a transformable markup <code>document</code> author
+      author of a transformable markup <code>document</code> 
       may wish to perform multiple discrete transformations. For
       example, an author wishing to produce an HTML document may wish
-      to performm the following transformations:</p>
+      to perform the following transformations:</p>
 
       <ol>
 	<li>Merge XML from external documents indicated by
 	<code>&lt;xi:include&gt;</code> elements.</li>
 	<li>Convert the document to Knitr HTML.</li>
-	<li>Process the code chunks in the Knitr HTML to produce and
+	<li>Process the code chunks in the Knitr HTML to produce 
 	HTML output.</li>
       </ol>
 
@@ -86,13 +86,13 @@
       <p>What an OpenAPI pipeline offers is the ability to wrap a
       transformation step in a module which takes a file as an input,
       and produces another file as an output. The output of one module
-      can be passed as the intput of another module, thus building a
+      can be passed as the input of another module, thus building a
       pipeline which describes the entire transformation. Each module
       in an OpenAPI pipeline specifies its execution language, meaning
       an OpenAPI pipeline can have access to a wide variety of
       tools.</p>
 
-      <p>The following sections describes the transformable markup
+      <p>The following section describes the transformable markup
       <code>document</code> used for the transformation pipelines
       described in this report. This report itself was authored using
       this <code>document</code> format, and the final output was
@@ -233,7 +233,7 @@
       modules, used to transform a tranformable <code>document</code>
       file to HTML output, and to PDF output, respectively. Both
       transformation pipelines include executing chunks of embedded R
-      code. .</p>
+      code.</p>
 	
       <h2 id="toHtmlPipeline">Transformation to HTML</h2>
 
