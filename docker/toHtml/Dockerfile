@@ -4,6 +4,13 @@
 FROM ubuntu:16.04
 MAINTAINER Ashley Noel Hinton <ahin017@aucklanduni.ac.nz>
 
+# set locale to UTF-8
+RUN sed -i -e 's/# en_NZ.UTF-8 UTF-8/en_NZ.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="en_NZ.UTF-8"' > /etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_NZ.UTF-8
+ENV LANG en_NZ.UTF-8 
+
 # add CRAN PPA
 RUN apt-get update && apt-get install -y apt-transport-https
 RUN echo 'deb https://cloud.r-project.org/bin/linux/ubuntu xenial/' > /etc/apt/sources.list.d/cran.list
