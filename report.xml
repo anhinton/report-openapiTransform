@@ -538,6 +538,10 @@ dev.off()
 	(<url>https://github.com/anhinton/conduit/releases/tag/v0.6-3</url>).
 	</li>
 
+	<li>Docker version 1.11.2 was used to execute the pipeline
+	examples in this report
+	(<url>https://www.docker.com/</url>).</li>
+
 	<li>GridGraphviz version 0.3, an R packages, was used to
 	produce the pipeline graphs in this report
 	(<url>http://r-forge.r-project.org/projects/gridgraph/</url>).</li>
@@ -584,19 +588,28 @@ dev.off()
       <h1>Resources</h1>
 
       <ul>
-	<li>The <a href="#toHtmlPipeline">transformation to HTML</a>
-	pipeline uses the source document <url>report.xml</url>, and
-	the input documents <url>metadataExample.xml</url>,
-	<url>elementsExample.xml</url>, <url>knitrExample.xml</url>,
-	and <url>xsl/toRhtml.xsl</url>. The source XML for the
-	pipeline can be found at
-	<url>transform/toHtml/pipeline.xml</url>, and the source XML
-	for the modules can be found at
-	<url>transform/toHtml/convertToRhtml.xml</url>,
-	<url>transform/toHtml/knitToHtml.xml</url>,
-	<url>transform/toHtml/substituteEntities.xml</url>, and
-	<url>transform/toHtml/xinclude.xml</url>. The R script used to
-	execute this pipeline can be found at <url>toHtml.R</url>.</li>
+	<li>
+	  <p>The <a href="#toHtmlPipeline">transformation to HTML</a>
+	  pipeline uses the source document <url>report.xml</url>, and
+	  the input documents <url>metadataExample.xml</url>,
+	  <url>elementsExample.xml</url>, <url>knitrExample.xml</url>,
+	  and <url>xsl/toRhtml.xsl</url>. The source XML for the
+	  pipeline can be found at
+	  <url>transform/toHtml/pipeline.xml</url>, and the source XML
+	  for the modules can be found at
+	  <url>transform/toHtml/convertToRhtml.xml</url>,
+	  <url>transform/toHtml/knitToHtml.xml</url>,
+	  <url>transform/toHtml/substituteEntities.xml</url>, and
+	  <url>transform/toHtml/xinclude.xml</url>. The R script used to
+	  execute this pipeline can be found at <url>toHtml.R</url>.</p>
+
+	  <p>A Docker image,
+	  <q>ahin017/report-openapitransform:toHtml</q>, has been
+	  created to provide all of the software requirements for the
+	  <code>toHtml</code> pipeline. More information can be found
+	  at
+	  <url>https://hub.docker.com/r/ahin017/report-openapitransform/</url></p>
+	</li>
 	
 	<li>The <a href="#toPdfPipeline">transformation to PDF</a>
 	pipeline uses the source document <url>report.xml</url>, and
