@@ -269,7 +269,7 @@ mean(x)]]&gt;&lt;/code&gt;
 <div class="chunk" id="knitrDemo"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">x</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rnorm</span><span class="hl std">(</span><span class="hl kwc">n</span> <span class="hl std">=</span> <span class="hl num">10</span><span class="hl std">)</span>
 <span class="hl kwd">mean</span><span class="hl std">(x)</span>
 </pre></div>
-<div class="output"><pre class="knitr r">## [1] 0.1571009
+<div class="output"><pre class="knitr r">## [1] -0.3366858
 </pre></div>
 </div></div>
 
@@ -617,31 +617,40 @@ mean(x)]]&gt;&lt;/code&gt;
 	  <a href="transform/toHtml/xinclude.xml">transform/toHtml/xinclude.xml</a>. The R script used to
 	  execute this pipeline can be found at <a href="toHtml.R">toHtml.R</a>.</p>
 
-	  <p>A Docker image,
-	  “ahin017/report-openapitransform:toHtml”, has been
-	  created to provide all of the software requirements for the
-	  <code>toHtml</code> pipeline. More information can be found
-	  at
+	  <p>The “toHtml” pipeline can be executed in a Docker
+	  image, “ahin017/report-openapitransform:toHtml”, which
+	  meets all of the software requirements for the
+	  pipeline. More information can be found at
 	  <a href="https://hub.docker.com/r/ahin017/report-openapitransform/">https://hub.docker.com/r/ahin017/report-openapitransform/</a></p>
 	</li>
 	
-	<li>The <a href="#toPdfPipeline">transformation to PDF</a>
-	pipeline uses the source document <a href="report.xml">report.xml</a>, and
-	the input documents <a href="metadataExample.xml">metadataExample.xml</a>,
-	<a href="elementsExample.xml">elementsExample.xml</a>, <a href="knitrExample.xml">knitrExample.xml</a>,
-	and <a href="xsl/toRtex.xsl">xsl/toRtex.xsl</a>. The source XML for the pipeline
-	can be found at <a href="transform/toPdf/pipeline.xml">transform/toPdf/pipeline.xml</a>, and
-	the source XML for the modules can be found at
-	<a href="transform/toPdf/commentCode.xml">transform/toPdf/commentCode.xml</a>,
-	<a href="transform/toPdf/convertToRhtml.xml">transform/toPdf/convertToRhtml.xml</a>,
-	<a href="transform/toPdf/convertToRtex.xml">transform/toPdf/convertToRtex.xml</a>,
-	<a href="transform/toPdf/knitToHtml.xml">transform/toPdf/knitToHtml.xml</a>,
-	<a href="transform/toPdf/knitToLatex.xml">transform/toPdf/knitToLatex.xml</a>,
-	<a href="transform/toPdf/latexChars.xml">transform/toPdf/latexChars.xml</a>,
-	<a href="transform/toPdf/latexToPdf.xml">transform/toPdf/latexToPdf.xml</a>,
-	<a href="transform/toPdf/substituteEntities.xml">transform/toPdf/substituteEntities.xml</a>, and
-	<a href="transform/toPdf/xinclude.xml">transform/toPdf/xinclude.xml</a>. The R script used to
-	execute this pipeline can be found at <a href="toPdf.R">toPdf.R</a>.</li>
+	<li>
+	  <p>The <a href="#toPdfPipeline">transformation to PDF</a>
+	  pipeline uses the source document <a href="report.xml">report.xml</a>, and
+	  the input documents <a href="metadataExample.xml">metadataExample.xml</a>,
+	  <a href="elementsExample.xml">elementsExample.xml</a>, <a href="knitrExample.xml">knitrExample.xml</a>,
+	  and <a href="xsl/toRtex.xsl">xsl/toRtex.xsl</a>. The source XML for the
+	  pipeline can be found at
+	  <a href="transform/toPdf/pipeline.xml">transform/toPdf/pipeline.xml</a>, and the source XML
+	  for the modules can be found at
+	  <a href="transform/toPdf/commentCode.xml">transform/toPdf/commentCode.xml</a>,
+	  <a href="transform/toPdf/convertToRhtml.xml">transform/toPdf/convertToRhtml.xml</a>,
+	  <a href="transform/toPdf/convertToRtex.xml">transform/toPdf/convertToRtex.xml</a>,
+	  <a href="transform/toPdf/knitToHtml.xml">transform/toPdf/knitToHtml.xml</a>,
+	  <a href="transform/toPdf/knitToLatex.xml">transform/toPdf/knitToLatex.xml</a>,
+	  <a href="transform/toPdf/latexChars.xml">transform/toPdf/latexChars.xml</a>,
+	  <a href="transform/toPdf/latexToPdf.xml">transform/toPdf/latexToPdf.xml</a>,
+	  <a href="transform/toPdf/substituteEntities.xml">transform/toPdf/substituteEntities.xml</a>, and
+	  <a href="transform/toPdf/xinclude.xml">transform/toPdf/xinclude.xml</a>. The R script used
+	  to execute this pipeline can be found at
+	  <a href="toPdf.R">toPdf.R</a>.</p>
+
+	  <p>The “toPdf” pipeline can be executed in a Docker
+	  image, “ahin017/report-openapitransform:toPdf”, which
+	  meets all of the software requirements for the
+	  pipeline. More information can be found at
+	  <a href="https://hub.docker.com/r/ahin017/report-openapitransform/">https://hub.docker.com/r/ahin017/report-openapitransform/</a></p>
+	</li>
       </ul>
     </section>
 

@@ -603,31 +603,40 @@ dev.off()
 	  <url>transform/toHtml/xinclude.xml</url>. The R script used to
 	  execute this pipeline can be found at <url>toHtml.R</url>.</p>
 
-	  <p>A Docker image,
-	  <q>ahin017/report-openapitransform:toHtml</q>, has been
-	  created to provide all of the software requirements for the
-	  <code>toHtml</code> pipeline. More information can be found
-	  at
+	  <p>The <q>toHtml</q> pipeline can be executed in a Docker
+	  image, <q>ahin017/report-openapitransform:toHtml</q>, which
+	  meets all of the software requirements for the
+	  pipeline. More information can be found at
 	  <url>https://hub.docker.com/r/ahin017/report-openapitransform/</url></p>
 	</li>
 	
-	<li>The <a href="#toPdfPipeline">transformation to PDF</a>
-	pipeline uses the source document <url>report.xml</url>, and
-	the input documents <url>metadataExample.xml</url>,
-	<url>elementsExample.xml</url>, <url>knitrExample.xml</url>,
-	and <url>xsl/toRtex.xsl</url>. The source XML for the pipeline
-	can be found at <url>transform/toPdf/pipeline.xml</url>, and
-	the source XML for the modules can be found at
-	<url>transform/toPdf/commentCode.xml</url>,
-	<url>transform/toPdf/convertToRhtml.xml</url>,
-	<url>transform/toPdf/convertToRtex.xml</url>,
-	<url>transform/toPdf/knitToHtml.xml</url>,
-	<url>transform/toPdf/knitToLatex.xml</url>,
-	<url>transform/toPdf/latexChars.xml</url>,
-	<url>transform/toPdf/latexToPdf.xml</url>,
-	<url>transform/toPdf/substituteEntities.xml</url>, and
-	<url>transform/toPdf/xinclude.xml</url>. The R script used to
-	execute this pipeline can be found at <url>toPdf.R</url>.</li>
+	<li>
+	  <p>The <a href="#toPdfPipeline">transformation to PDF</a>
+	  pipeline uses the source document <url>report.xml</url>, and
+	  the input documents <url>metadataExample.xml</url>,
+	  <url>elementsExample.xml</url>, <url>knitrExample.xml</url>,
+	  and <url>xsl/toRtex.xsl</url>. The source XML for the
+	  pipeline can be found at
+	  <url>transform/toPdf/pipeline.xml</url>, and the source XML
+	  for the modules can be found at
+	  <url>transform/toPdf/commentCode.xml</url>,
+	  <url>transform/toPdf/convertToRhtml.xml</url>,
+	  <url>transform/toPdf/convertToRtex.xml</url>,
+	  <url>transform/toPdf/knitToHtml.xml</url>,
+	  <url>transform/toPdf/knitToLatex.xml</url>,
+	  <url>transform/toPdf/latexChars.xml</url>,
+	  <url>transform/toPdf/latexToPdf.xml</url>,
+	  <url>transform/toPdf/substituteEntities.xml</url>, and
+	  <url>transform/toPdf/xinclude.xml</url>. The R script used
+	  to execute this pipeline can be found at
+	  <url>toPdf.R</url>.</p>
+
+	  <p>The <q>toPdf</q> pipeline can be executed in a Docker
+	  image, <q>ahin017/report-openapitransform:toPdf</q>, which
+	  meets all of the software requirements for the
+	  pipeline. More information can be found at
+	  <url>https://hub.docker.com/r/ahin017/report-openapitransform/</url></p>
+	</li>
       </ul>
     </section>
 
