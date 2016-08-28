@@ -1,13 +1,28 @@
-# Things to do in this Dockerfile, which will run the toHtml example:
-#
-#   + get new apt stuff:
-#     apt update
-#     apt install -y apt-transport-https
-#   + add to /etc/apt/sources.list:
-#     deb https://cloud.r-project.org/bin/linux/ubuntu xenial/
-#   + add ubuntu apt key:
-#     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-#     apt update
-#   + install system packages:
-#     apt install libxml2-utils xsltproc r-base libxml2-dev \
-#         libcurl4-openssl-dev libssl-dev
+# This is a comment
+FROM ubuntu:16.04
+MAINTAINER Ashley Noel Hinton <ahin017@aucklanduni.ac.nz>
+
+# add CRAN PPA
+RUN apt-get update && apt-get install -y apt-transport-https
+RUN echo 'deb https://cloud.r-project.org/bin/linux/ubuntu xenial/' > /etc/apt/sources.list.d/cran.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+
+# install system packages
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxml2-utils \
+    python-dev \
+    r-base=3.3.1* \
+    wget \
+    xsltproc \
+&& rm -rf /var/lib/apt/lists/*
+
+# install R packages
+COPY Rpackages.R /usr/local/src/myscripts/
+RUN ["Rscript", "/usr/local/src/myscripts/Rpackages.R"]
+
+RUN wget -O conduit-0.6-3.tar.gz \
+    https://github.com/anhinton/conduit/archive/v0.6-3.tar.gz \
+&& R CMD INSTALL conduit-0.6-3.tar.gz

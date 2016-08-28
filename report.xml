@@ -537,6 +537,10 @@ dev.off()
 	package, was used to produce the final version of this report
 	(<url>https://github.com/anhinton/conduit/releases/tag/v0.6-3</url>).
 	</li>
+
+	<li>GridGraphviz version 0.3, an R packages, was used to
+	produce the pipeline graphs in this report
+	(<url>http://r-forge.r-project.org/projects/gridgraph/</url>).</li>
 	
 	<li>Knitr version 1.12.3, an R package, was used for the
 	transformations in this report
