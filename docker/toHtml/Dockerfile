@@ -1,4 +1,6 @@
-# This is a comment
+# Docker image ahin017/report-openapitransform:toHtml
+# For executing 'toHtml' pipeline
+
 FROM ubuntu:16.04
 MAINTAINER Ashley Noel Hinton <ahin017@aucklanduni.ac.nz>
 
