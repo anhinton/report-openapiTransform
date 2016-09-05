@@ -141,10 +141,30 @@
       transformation step in a module which takes a file as an input,
       and produces another file as an output. The output of one module
       can be passed as the input of another module, thus building a
-      pipeline which describes the entire transformation. Each module
+      pipeline which describes the entire transformation. Module
+      inputs and outputs are also given a format type. In this way a
+      module which requiries a file input of the format type “HTML
+      file” can be matched with an output which produces a file of
+      the same format, helping to ensure correct execution. Each module
       in an OpenAPI pipeline specifies its execution language, meaning
       an OpenAPI pipeline can have access to a wide variety of
       tools.</p>
+
+      <p>The authors must admit that a simple pipeline with only four
+      modules, like the pipeline shown in <a href="#figure1">figure
+      1</a>, could be just as easily executed using a shell script or
+      a make file. Unlike these alternatives, an OpenAPI pipeline
+      provides an author with greater control over defining and
+      extending a pipeline or workflow. For example, a simple pipeline
+      can be easily extended, and can branch in multiple interesting
+      ways, as in the pipeline shown in <a href="#figure2">figure
+      2</a> below. An OpenAPI pipeline also helps an author to keep
+      track of and manage multiple outputs, each of which may also be
+      required as inputs to various modules. The ability to specify
+      the format type of module inputs and outputs also affords an
+      author of an OpenAPI pipeline with a greater degree of control
+      over transformation steps than is easily found using shell
+      scripts.</p>
 
       <p>The following section describes the transformable markup
       <code>document</code> used for the transformation pipelines
@@ -269,7 +289,7 @@ mean(x)]]&gt;&lt;/code&gt;
 <div class="chunk" id="knitrDemo"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">x</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rnorm</span><span class="hl std">(</span><span class="hl kwc">n</span> <span class="hl std">=</span> <span class="hl num">10</span><span class="hl std">)</span>
 <span class="hl kwd">mean</span><span class="hl std">(x)</span>
 </pre></div>
-<div class="output"><pre class="knitr r">## [1] -0.3366858
+<div class="output"><pre class="knitr r">## [1] 0.1318397
 </pre></div>
 </div></div>
 
